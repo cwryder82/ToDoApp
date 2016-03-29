@@ -22,5 +22,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom"
+        android:singleLine="true"/>
 </LinearLayout>
