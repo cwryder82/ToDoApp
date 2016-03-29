@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     new Firebase("https://todoapp1982.firebaseio.com/todoItems")
                             .push()
-                            .child("addText")
+                            .child("text")
                             .setValue(addText.getText().toString());
                     addText.setText("");
                     Snackbar.make(v, "Note Added", Snackbar.LENGTH_LONG)
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 new Firebase("https://todoapp1982.firebaseio.com/todoItems")
-                        .orderByChild("addText")
+                        .orderByChild("text")
                         .equalTo((String) listView.getItemAtPosition(position))
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             public void onDataChange(DataSnapshot dataSnapshot) {
