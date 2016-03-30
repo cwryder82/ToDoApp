@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,10 +24,14 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     EditText addText;
+
+    ArrayList<Note> notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +40,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        addText = (EditText) findViewById(R.id.todoText);
+        addText = (EditText) findViewById(R.id.add_note);
+        notes = new ArrayList<>();
 
-        // Get ListView object from xml
+        RecyclerView rvNotes = (RecyclerView) findViewById(R.id.rv);
+
+        final NotesAdapter adapter = new NotesAdapter(notes);
+
+        rvNotes.setAdapter(adapter);
+
+        rvNotes.setLayoutManager(new LinearLayoutManager(this));
+
+       /* // Get ListView object from xml
         listView = (ListView) findViewById(R.id.listView);
 
         // Create a new Adapter
@@ -44,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, android.R.id.text1);
 
         // Assign adapter to ListView
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter);*/
 
         // Use Firebase to populate the list.
         Firebase.setAndroidContext(this);
@@ -52,12 +67,19 @@ public class MainActivity extends AppCompatActivity {
         new Firebase("https://todoapp1982.firebaseio.com/todoItems")
                 .addChildEventListener(new ChildEventListener() {
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        adapter.add((String) dataSnapshot.child("text").getValue());
+                        String str = (String) dataSnapshot.child("text").getValue();
+                        Note nt = new Note(str);
+                        notes.add(nt);
+                        int pos = notes.indexOf(nt);
+                        adapter.notifyItemInserted(pos);
                     }
 
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        adapter.remove((String) dataSnapshot.child("text").getValue());
-                    }
+                        String str = (String) dataSnapshot.child("text").getValue();
+                        Note nt = new Note(str);
+                        int pos = notes.indexOf(nt);
+                        notes.remove(nt);
+                        adapter.notifyItemRemoved(pos);                    }
 
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     }
@@ -101,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Delete items when clicked
+        /*// Delete items when clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,
@@ -121,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
             }
-        });
+        });*/
     }
 
     @Override
