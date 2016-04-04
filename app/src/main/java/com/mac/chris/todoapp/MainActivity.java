@@ -2,6 +2,7 @@ package com.mac.chris.todoapp;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -48,5 +49,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    static class FragmentListener implements NotesFragment.OnFragmentInteractionListener {
+
+        @Override
+        public void onFragmentInteraction(Uri uri) {
+
+        }
     }
 }
