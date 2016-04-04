@@ -1,37 +1,16 @@
 package com.mac.chris.todoapp;
 
-import android.content.Context;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-
-import java.util.ArrayList;
+import com.mac.chris.todoapp.fragments.NotesFragment;
 
 public class MainActivity extends AppCompatActivity {
-
-    private ListView listView;
-    EditText addText;
-
-    ArrayList<Note> notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,110 +19,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        addText = (EditText) findViewById(R.id.add_note);
-        notes = new ArrayList<>();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        RecyclerView rvNotes = (RecyclerView) findViewById(R.id.rv);
+        NotesFragment recyclFrag = new NotesFragment();
+        fragmentTransaction.add(R.id.container, recyclFrag);
+        fragmentTransaction.commit();
 
-        final NotesAdapter adapter = new NotesAdapter(notes);
-
-        rvNotes.setAdapter(adapter);
-
-        rvNotes.setLayoutManager(new LinearLayoutManager(this));
-
-       /* // Get ListView object from xml
-        listView = (ListView) findViewById(R.id.listView);
-
-        // Create a new Adapter
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1);
-
-        // Assign adapter to ListView
-        listView.setAdapter(adapter);*/
-
-        // Use Firebase to populate the list.
-        Firebase.setAndroidContext(this);
-
-        new Firebase("https://todoapp1982.firebaseio.com/todoItems")
-                .addChildEventListener(new ChildEventListener() {
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        String str = (String) dataSnapshot.child("text").getValue();
-                        Note nt = new Note(str);
-                        notes.add(nt);
-                        int pos = notes.indexOf(nt);
-                        adapter.notifyItemInserted(pos);
-                    }
-
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        String str = (String) dataSnapshot.child("text").getValue();
-                        Note nt = new Note(str);
-                        int pos = notes.indexOf(nt);
-                        notes.remove(nt);
-                        adapter.notifyItemRemoved(pos);                    }
-
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    public void onCancelled(FirebaseError firebaseError) {
-                    }
-                });
-
-        // Add items via the Button and EditText at the bottom of the window.
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addText.setVisibility(View.VISIBLE);
-                addText.requestFocus();
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (inputMethodManager != null) {
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-            }
-        });
-
-        addText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    new Firebase("https://todoapp1982.firebaseio.com/todoItems")
-                            .push()
-                            .child("text")
-                            .setValue(addText.getText().toString());
-                    addText.setText("");
-                    Snackbar.make(v, "Note Added", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        /*// Delete items when clicked
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                new Firebase("https://todoapp1982.firebaseio.com/todoItems")
-                        .orderByChild("text")
-                        .equalTo((String) listView.getItemAtPosition(position))
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.hasChildren()) {
-                                    DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
-                                    firstChild.getRef().removeValue();
-                                }
-                            }
-
-                            public void onCancelled(FirebaseError firebaseError) {
-                            }
-                        });
-            }
-        });*/
     }
 
     @Override

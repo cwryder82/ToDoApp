@@ -1,15 +1,11 @@
-package com.mac.chris.todoapp;
+package com.mac.chris.todoapp.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.RemoteViews;
-
-import java.util.Random;
 
 /**
  * Created by chris on 3/27/16.

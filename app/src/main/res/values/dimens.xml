@@ -4,4 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="widget_margin">8dp</dimen>
+
+    <!-- Default text sizes -->
+    <dimen name="note_text">20dp</dimen>
 </resources>

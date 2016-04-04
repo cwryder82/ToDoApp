@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="MyWidgetProvider" >
+        <receiver android:name=".widget.MyWidgetProvider" >
             <intent-filter >
                 <action
                     android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -32,7 +32,7 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <service android:name=".UpdateWidgetService"/>
+        <service android:name=".widget.UpdateWidgetService"/>
     </application>
 
 </manifest>

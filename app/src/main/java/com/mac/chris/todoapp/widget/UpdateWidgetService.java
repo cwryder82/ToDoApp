@@ -1,19 +1,21 @@
-package com.mac.chris.todoapp;
+package com.mac.chris.todoapp.widget;
 
 import java.util.Random;
 
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.mac.chris.todoapp.R;
+import com.mac.chris.todoapp.widget.MyWidgetProvider;
+
 public class UpdateWidgetService extends Service {
 
-    private static final String LOG = "com.mac.chris.todoapp.UpdateWidgetService";
+    private static final String LOG = "com.mac.chris.todoapp.widget.UpdateWidgetService";
 
     @Override
     public void onStart(Intent intent, int startId) {
