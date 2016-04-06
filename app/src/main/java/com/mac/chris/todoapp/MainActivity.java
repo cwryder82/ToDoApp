@@ -1,5 +1,6 @@
 package com.mac.chris.todoapp;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
@@ -8,10 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.mac.chris.todoapp.fragments.EditFragment;
 import com.mac.chris.todoapp.fragments.NotesFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NotesFragment.OnFragmentInteractionListener {
+
+    EditFragment editFrag;
+    NotesFragment recyclFrag;
+
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +29,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        editFrag = new EditFragment();
+        recyclFrag = new NotesFragment();
 
-        NotesFragment recyclFrag = new NotesFragment();
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container, recyclFrag);
         fragmentTransaction.commit();
 
@@ -51,11 +61,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static class FragmentListener implements NotesFragment.OnFragmentInteractionListener {
+    @Override
+    public void passNote(Note note, String str) {
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
 
-        @Override
-        public void onFragmentInteraction(Uri uri) {
+        if (note!=null) {
 
         }
+
     }
 }

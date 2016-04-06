@@ -1,5 +1,6 @@
 package com.mac.chris.todoapp.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.mac.chris.todoapp.Note;
 import com.mac.chris.todoapp.NotesAdapter;
 import com.mac.chris.todoapp.R;
@@ -44,12 +46,25 @@ public class NotesFragment extends Fragment {
     RecyclerView.LayoutManager mLayoutManager;
     FloatingActionButton fab;
 
+    OnFragmentInteractionListener activity;
+
     public Firebase ref;
+
+    @Override
+    public void onAttach(Activity activity) {
+        this.activity = (OnFragmentInteractionListener) activity;
+
+        super.onAttach(activity);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        // Use Firebase to populate the list.
+        Firebase.setAndroidContext(getActivity());
+        ref = new Firebase("https://todoapp1982.firebaseio.com/todoItems");
 
         addText = (EditText) rootView.findViewById(R.id.add_note);
 
@@ -59,32 +74,36 @@ public class NotesFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
+        recyclerView.addOnItemTouchListener(
+                new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View v, int i) {
-
                 Toast.makeText(getActivity(), "onClick " + i, Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getActivity(), EditFragment.class);
-//                intent.putExtra("note", new Note(notes.get(i).getName()));
-//                startActivity(intent);
-
+                activity.passNote(notes.get(i), String.valueOf(i));
             }
 
             @Override
             public void onLongClick(View v, int i) {
-
                 Toast.makeText(getActivity(), "onLongClick " + i, Toast.LENGTH_SHORT).show();
+                ref.orderByChild("text")
+                        .equalTo((String) notes.get(i).getName().toString())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.hasChildren()) {
+                                    DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
+                                    firstChild.getRef().removeValue();
+                                }
+                            }
 
-
+                            public void onCancelled(FirebaseError firebaseError) {
+                            }
+                        });
             }
         }));
 
         adapter = new NotesAdapter(notes);
         recyclerView.setAdapter(adapter);
 
-        // Use Firebase to populate the list.
-        Firebase.setAndroidContext(getActivity());
-        ref = new Firebase("https://todoapp1982.firebaseio.com/todoItems");
         ref.addChildEventListener(new ChildEventListener() {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String str = (String) dataSnapshot.child("text").getValue();
@@ -147,19 +166,7 @@ public class NotesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 new Firebase("https://todoapp1982.firebaseio.com/todoItems")
-                        .orderByChild("text")
-                        .equalTo((String) listView.getItemAtPosition(position))
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.hasChildren()) {
-                                    DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
-                                    firstChild.getRef().removeValue();
-                                }
-                            }
 
-                            public void onCancelled(FirebaseError firebaseError) {
-                            }
-                        });
             }
         });*/
 
@@ -173,16 +180,11 @@ public class NotesFragment extends Fragment {
 
         public RecyclerTouchListener(Context context, final RecyclerView recyclerView, ClickListener listener) {
 
-            Log.d("RTL", "RecyclerTouchListener");
-
             this.clickListener = listener;
 
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
-
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
-
-                    Log.d("RTL","onSingleTapUp"+e);
                     return true;
                 }
 
@@ -190,22 +192,15 @@ public class NotesFragment extends Fragment {
                 public void onLongPress(MotionEvent e) {
                     View child = recyclerView.findChildViewUnder(e.getX(),e.getY());
                     if (child!=null && clickListener!=null) {
-
                         clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
-
                     }
-                    Log.d("RTL", "onLongPress" + e);
                 }
-
             });
-
         }
 
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
             View child = rv.findChildViewUnder(e.getX(),e.getY());
-
             if (child!=null && clickListener!=null && gestureDetector.onTouchEvent(e)) {
                 clickListener.onClick(child, rv.getChildAdapterPosition(child));
             }
@@ -214,21 +209,15 @@ public class NotesFragment extends Fragment {
 
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-            Log.d("RTL", "onTouchEvent"+e);
-
         }
 
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            Log.d("RTL", "onRequestDisallowInterceptTouchEvent");
-
         }
-
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void passNote(Note note, String str);
     }
 
     public interface ClickListener {
