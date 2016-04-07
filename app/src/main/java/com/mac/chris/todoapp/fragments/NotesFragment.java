@@ -78,7 +78,6 @@ public class NotesFragment extends Fragment {
                 new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View v, int i) {
-                Toast.makeText(getActivity(), "onClick " + i, Toast.LENGTH_SHORT).show();
                 activity.passNote(notes.get(i), String.valueOf(i));
             }
 
@@ -217,7 +216,7 @@ public class NotesFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void passNote(Note note, String str);
+        void passNote(Note note, String position);
     }
 
     public interface ClickListener {

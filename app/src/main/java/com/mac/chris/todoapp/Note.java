@@ -32,8 +32,6 @@ public class Note implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeStringArray(new String[] {this.mName});
-
-
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

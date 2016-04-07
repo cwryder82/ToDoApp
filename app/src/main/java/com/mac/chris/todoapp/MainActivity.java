@@ -29,12 +29,13 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        editFrag = new EditFragment();
         recyclFrag = new NotesFragment();
+        editFrag = new EditFragment();
 
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.container, recyclFrag);
+        fragmentTransaction.add(R.id.container1, recyclFrag);
+        fragmentTransaction.add(R.id.container2, editFrag);
         fragmentTransaction.commit();
 
     }
@@ -62,11 +63,9 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
     }
 
     @Override
-    public void passNote(Note note, String str) {
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-
+    public void passNote(Note note, String i) {
         if (note!=null) {
-
+            editFrag.setNotes(note, i);
         }
 
     }
