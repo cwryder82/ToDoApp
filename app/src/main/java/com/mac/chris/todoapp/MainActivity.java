@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container1, recyclFrag);
-        fragmentTransaction.add(R.id.container2, editFrag);
+        //fragmentTransaction.add(R.id.container2, editFrag);
         fragmentTransaction.commit();
 
     }
@@ -65,7 +65,11 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
     @Override
     public void passNote(Note note, String i) {
         if (note!=null) {
-            editFrag.setNotes(note, i);
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container1, editFrag);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+            editFrag.setNote(note, i);
         }
 
     }
