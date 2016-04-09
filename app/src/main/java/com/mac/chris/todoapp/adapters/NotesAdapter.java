@@ -48,22 +48,19 @@ public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewH
     @Override
     protected void itemChanged(Note oldItem, Note newItem, String key, int position) {
         Log.d("MyAdapter", "Changed an item at " + position);
-
     }
 
     @Override
     protected void itemRemoved(Note item, String key, int position) {
         Log.d("MyAdapter", "Removed an item from the adapter at" + position);
-
     }
 
     @Override
     protected void itemMoved(Note item, String key, int oldPosition, int newPosition) {
         Log.d("MyAdapter", "Moved an item.");
-
     }
 
-    public static class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class NoteViewHolder extends RecyclerView.ViewHolder{
 
         public CardView cv;
         public TextView tv;
@@ -74,11 +71,6 @@ public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewH
             cv = (CardView) itemView.findViewById(R.id.cv);
             img = (ImageView) itemView.findViewById(R.id.noteImage);
             tv = (TextView) itemView.findViewById(R.id.noteText);
-        }
-
-        @Override
-        public void onClick(View v) {
-
         }
     }
 }

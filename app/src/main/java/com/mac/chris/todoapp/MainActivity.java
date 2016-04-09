@@ -11,10 +11,11 @@ import android.view.MenuItem;
 import com.mac.chris.todoapp.fragments.EditFragment;
 import com.mac.chris.todoapp.fragments.NotesFragment;
 
-public class MainActivity extends AppCompatActivity implements NotesFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements NotesFragment.OnFragmentInteractionListener, EditFragment.SaveFragmentItem {
 
     EditFragment editFrag;
-    NotesFragment recyclFrag;
+    NotesFragment notesFrag;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -26,12 +27,12 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclFrag = new NotesFragment();
+        notesFrag = new NotesFragment();
         editFrag = new EditFragment();
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.container1, recyclFrag);
+        fragmentTransaction.add(R.id.container1, notesFrag);
         fragmentTransaction.commit();
 
     }
@@ -67,6 +68,11 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
             fragmentTransaction.commit();
             editFrag.setNote(note, i);
         }
+    }
+
+    @Override
+    public void saveNote(Note oldnote, Note newnote, int i) {
+        notesFrag.saveFromEdit(oldnote, newnote, i);
     }
 
     @Override

@@ -43,12 +43,18 @@ public class EditFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        activity.saveNote(note, new Note(noteText.getText().toString()), position);
+    }
+
     public void setNote (Note note, int i) {
         this.note = note;
         this.position = i;
     }
 
     public interface SaveFragmentItem {
-        public void saveNote(Note note, int i);
+        void saveNote(Note oldnote, Note newnote, int i);
     }
 }

@@ -24,8 +24,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.mac.chris.todoapp.Note;
-import com.mac.chris.todoapp.adapters.NotesAdapter;
 import com.mac.chris.todoapp.R;
+import com.mac.chris.todoapp.adapters.NotesAdapter;
 
 import java.util.ArrayList;
 
@@ -67,7 +67,6 @@ public class NotesFragment extends Fragment {
         notes = new ArrayList<>();
         keys = new ArrayList<>();
 
-        // Use Firebase to populate the list.
         Firebase.setAndroidContext(getActivity());
         mquery = new Firebase("https://todoapp1982.firebaseio.com/todoItems");
 
@@ -91,7 +90,6 @@ public class NotesFragment extends Fragment {
 
             @Override
             public void onLongClick(View v, int i) {
-                Toast.makeText(getActivity(), "onLongClick " + i, Toast.LENGTH_SHORT).show();
                 mquery.orderByChild("text")
                         .equalTo((String) notes.get(i).getName())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -105,6 +103,8 @@ public class NotesFragment extends Fragment {
                             public void onCancelled(FirebaseError firebaseError) {
                             }
                         });
+
+                Toast.makeText(getActivity(), "Note Deleted at " + i, Toast.LENGTH_SHORT).show();
             }
         }));
 
@@ -181,6 +181,23 @@ public class NotesFragment extends Fragment {
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
         }
+    }
+
+    public void saveFromEdit(Note oldnote, final Note newnote, final int i) {
+        mquery.orderByChild("text")
+                .equalTo((String) oldnote.getName())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChildren()) {
+                            DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
+                            firstChild.child("text").getRef().setValue(newnote.getName());
+                            adapter.notifyItemChanged(i);
+                        }
+                    }
+
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
     }
 
     public interface OnFragmentInteractionListener {
