@@ -34,13 +34,17 @@ public class EditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit, container, false);
-
         noteText = (EditText) rootView.findViewById(R.id.editNote);
+
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if (note != null) {
             noteText.setText(note.getName());
         }
-
-        return rootView;
     }
 
     @Override
