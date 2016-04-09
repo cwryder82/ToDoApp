@@ -1,4 +1,4 @@
-package com.mac.chris.todoapp;
+package com.mac.chris.todoapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
+import com.mac.chris.todoapp.Note;
+import com.mac.chris.todoapp.R;
 
 import java.util.ArrayList;
 

@@ -19,21 +19,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.mac.chris.todoapp.Note;
-import com.mac.chris.todoapp.NotesAdapter;
+import com.mac.chris.todoapp.adapters.NotesAdapter;
 import com.mac.chris.todoapp.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by chris on 4/3/16.
- */
 public class NotesFragment extends Fragment {
 
     EditText addText;
@@ -98,7 +93,7 @@ public class NotesFragment extends Fragment {
             public void onLongClick(View v, int i) {
                 Toast.makeText(getActivity(), "onLongClick " + i, Toast.LENGTH_SHORT).show();
                 mquery.orderByChild("text")
-                        .equalTo((String) notes.get(i).getName().toString())
+                        .equalTo((String) notes.get(i).getName())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.hasChildren()) {
@@ -193,8 +188,8 @@ public class NotesFragment extends Fragment {
     }
 
     public interface ClickListener {
-        public void onClick(View v, int i);
-        public void onLongClick(View v, int i);
+        void onClick(View v, int i);
+        void onLongClick(View v, int i);
     }
 
 }
