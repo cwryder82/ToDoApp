@@ -1,23 +1,25 @@
 package com.mac.chris.todoapp;
 
 import android.content.Context;
-import android.media.Image;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.Query;
+
 import java.util.ArrayList;
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
+public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewHolder, Note> {
 
-    private ArrayList<Note> mNotes;
 
-    public NotesAdapter(ArrayList<Note> notes) {
-        mNotes = notes;
+    public NotesAdapter(Query query, Class<Note> itemClass, @Nullable ArrayList<Note> items, @Nullable ArrayList<String> keys) {
+        super(query, itemClass, items, keys);
     }
 
     @Override
@@ -25,23 +27,38 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        // Inflate the custom layout
         View noteView = inflater.inflate(R.layout.item_note, parent, false);
 
-        // Return a new holder instance
         return new NoteViewHolder(noteView);
     }
 
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int i) {
+        Note item = getItem(i);
+        holder.tv.setText(item.getName());
+    }
 
-        holder.tv.setText(mNotes.get(i).getName().toString());
+    @Override
+    protected void itemAdded(Note item, String key, int position) {
+        Log.d("MyAdapter", "Added a new item to the adapter at index"+position);
+    }
+
+    @Override
+    protected void itemChanged(Note oldItem, Note newItem, String key, int position) {
+        Log.d("MyAdapter", "Changed an item at " + position);
 
     }
 
     @Override
-    public int getItemCount() {
-        return mNotes.size();
+    protected void itemRemoved(Note item, String key, int position) {
+        Log.d("MyAdapter", "Removed an item from the adapter at" + position);
+
+    }
+
+    @Override
+    protected void itemMoved(Note item, String key, int oldPosition, int newPosition) {
+        Log.d("MyAdapter", "Moved an item.");
+
     }
 
     public static class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

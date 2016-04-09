@@ -1,5 +1,7 @@
 package com.mac.chris.todoapp.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,13 +18,17 @@ public class EditFragment extends Fragment {
 
     EditText noteText;
     Note note;
-    String position;
+    int position;
 
-    public void setNote (Note note, String i) {
-        this.note = note;
-        this.position = i;
+    SaveFragmentItem activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (SaveFragmentItem) context;
+        }
     }
-
 
     @Nullable
     @Override
@@ -35,5 +41,14 @@ public class EditFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    public void setNote (Note note, int i) {
+        this.note = note;
+        this.position = i;
+    }
+
+    public interface SaveFragmentItem {
+        public void saveNote(Note note, int i);
     }
 }

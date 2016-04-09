@@ -8,18 +8,18 @@ import android.os.Parcelable;
 */
 public class Note implements Parcelable {
 
-    private String mName;
+    private String text;
 
     public Note(String name) {
-            mName = name;
+            text = name;
     }
 
     public Note(Parcel in) {
-        this.mName = in.readString();
+        this.text = in.readString();
     }
 
     public String getName() {
-        return mName;
+        return text;
     }
 
 
@@ -31,7 +31,7 @@ public class Note implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeStringArray(new String[] {this.mName});
+        dest.writeStringArray(new String[] {this.text});
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

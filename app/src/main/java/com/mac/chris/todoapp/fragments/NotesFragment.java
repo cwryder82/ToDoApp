@@ -23,6 +23,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.mac.chris.todoapp.Note;
 import com.mac.chris.todoapp.NotesAdapter;
@@ -38,6 +39,9 @@ public class NotesFragment extends Fragment {
     EditText addText;
 
     ArrayList<Note> notes;
+    ArrayList<String> keys;
+    Firebase mquery;
+
     RecyclerView recyclerView;
     NotesAdapter adapter;
     RecyclerView.LayoutManager mLayoutManager;
@@ -45,7 +49,6 @@ public class NotesFragment extends Fragment {
 
     OnFragmentInteractionListener activity;
 
-    public Firebase ref;
 
     @Override
     public void onAttach(Context context) {
@@ -55,35 +58,46 @@ public class NotesFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        adapter.destroy();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        notes = new ArrayList<>();
+        keys = new ArrayList<>();
+
         // Use Firebase to populate the list.
         Firebase.setAndroidContext(getActivity());
-        ref = new Firebase("https://todoapp1982.firebaseio.com/todoItems");
+        mquery = new Firebase("https://todoapp1982.firebaseio.com/todoItems");
 
         addText = (EditText) rootView.findViewById(R.id.add_note);
 
-        notes = new ArrayList<>();
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
+        adapter = new NotesAdapter(mquery, Note.class, notes, keys);
+        recyclerView.setAdapter(adapter);
+
         recyclerView.addOnItemTouchListener(
                 new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View v, int i) {
-                activity.passNote(notes.get(i), String.valueOf(i));
+                activity.toEdit(notes.get(i), i);
             }
 
             @Override
             public void onLongClick(View v, int i) {
                 Toast.makeText(getActivity(), "onLongClick " + i, Toast.LENGTH_SHORT).show();
-                ref.orderByChild("text")
+                mquery.orderByChild("text")
                         .equalTo((String) notes.get(i).getName().toString())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,36 +112,6 @@ public class NotesFragment extends Fragment {
                         });
             }
         }));
-
-        adapter = new NotesAdapter(notes);
-        recyclerView.setAdapter(adapter);
-
-        ref.addChildEventListener(new ChildEventListener() {
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String str = (String) dataSnapshot.child("text").getValue();
-                Note nt = new Note(str);
-                notes.add(nt);
-                int pos = notes.indexOf(nt);
-                adapter.notifyItemInserted(pos);
-            }
-
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String str = (String) dataSnapshot.child("text").getValue();
-                Note nt = new Note(str);
-                int pos = notes.indexOf(nt);
-                notes.remove(nt);
-                adapter.notifyItemRemoved(pos);
-            }
-
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
 
         // Add items via the Button and EditText at the bottom of the window.
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -148,7 +132,7 @@ public class NotesFragment extends Fragment {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
                 if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    ref.push().child("text").setValue(addText.getText().toString());
+                    mquery.push().child("text").setValue(addText.getText().toString());
                     addText.setText("");
                     Snackbar.make(v, "Note Added", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -157,16 +141,6 @@ public class NotesFragment extends Fragment {
                 return false;
             }
         });
-
-        /*// Delete items when clicked
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                new Firebase("https://todoapp1982.firebaseio.com/todoItems")
-
-            }
-        });*/
 
         return rootView;
     }
@@ -215,7 +189,7 @@ public class NotesFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void passNote(Note note, String position);
+        void toEdit(Note note, int position);
     }
 
     public interface ClickListener {

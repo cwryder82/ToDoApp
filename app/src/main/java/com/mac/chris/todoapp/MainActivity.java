@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
     }
 
     @Override
-    public void passNote(Note note, String i) {
+    public void toEdit(Note note, int i) {
         if (note!=null) {
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container1, editFrag);
