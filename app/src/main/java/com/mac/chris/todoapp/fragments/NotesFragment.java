@@ -1,17 +1,14 @@
 package com.mac.chris.todoapp.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -51,10 +48,11 @@ public class NotesFragment extends Fragment {
     public Firebase ref;
 
     @Override
-    public void onAttach(Activity activity) {
-        this.activity = (OnFragmentInteractionListener) activity;
-
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (OnFragmentInteractionListener) context;
+        }
     }
 
     @Nullable
@@ -70,6 +68,7 @@ public class NotesFragment extends Fragment {
 
         notes = new ArrayList<>();
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv);
+        recyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);

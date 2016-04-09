@@ -1,15 +1,12 @@
 package com.mac.chris.todoapp;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.mac.chris.todoapp.fragments.EditFragment;
 import com.mac.chris.todoapp.fragments.NotesFragment;
@@ -32,10 +29,9 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
         recyclFrag = new NotesFragment();
         editFrag = new EditFragment();
 
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container1, recyclFrag);
-        //fragmentTransaction.add(R.id.container2, editFrag);
         fragmentTransaction.commit();
 
     }
@@ -70,6 +66,17 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnF
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
             editFrag.setNote(note, i);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
         }
 
     }
