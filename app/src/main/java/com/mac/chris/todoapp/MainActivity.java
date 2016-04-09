@@ -84,6 +84,5 @@ public class MainActivity extends AppCompatActivity
         } else {
             getFragmentManager().popBackStack();
         }
-
     }
 }
