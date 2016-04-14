@@ -16,6 +16,7 @@ import com.mac.chris.todoapp.R;
 
 public class EditFragment extends Fragment {
 
+    final static String TITLE = "Edit Note";
     EditText noteText;
     Note note;
     int position;
@@ -34,6 +35,7 @@ public class EditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit, container, false);
+        getActivity().setTitle(TITLE);
         noteText = (EditText) rootView.findViewById(R.id.editNote);
 
         return rootView;

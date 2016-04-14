@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -30,6 +31,8 @@ import com.mac.chris.todoapp.adapters.NotesAdapter;
 import java.util.ArrayList;
 
 public class NotesFragment extends Fragment {
+
+    final static String TITLE = "My Notes";
 
     EditText addText;
 
@@ -53,20 +56,16 @@ public class NotesFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        adapter.destroy();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        getActivity().setTitle(TITLE);
 
         notes = new ArrayList<>();
         keys = new ArrayList<>();
 
+        //Firebase.getDefaultConfig().setPersistenceEnabled(true);
         Firebase.setAndroidContext(getActivity());
         mquery = new Firebase("https://todoapp1982.firebaseio.com/todoItems");
 
@@ -107,6 +106,8 @@ public class NotesFragment extends Fragment {
                 Toast.makeText(getActivity(), "Note Deleted at " + i, Toast.LENGTH_SHORT).show();
             }
         }));
+
+        //ItemTouchHelper ith = new ItemTouchHelper();
 
         // Add items via the Button and EditText at the bottom of the window.
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -198,6 +199,12 @@ public class NotesFragment extends Fragment {
                     public void onCancelled(FirebaseError firebaseError) {
                     }
                 });
+    }
+
+    @Override
+    public void onDestroyView() {
+        adapter = null;
+        super.onDestroyView();
     }
 
     public interface OnFragmentInteractionListener {

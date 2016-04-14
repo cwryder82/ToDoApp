@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.container1, notesFrag);
+        fragmentTransaction.replace(R.id.container1, notesFrag);
         fragmentTransaction.commit();
 
     }
