@@ -37,7 +37,7 @@ public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewH
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int i) {
         Note item = getItem(i);
-        holder.tv.setText(item.getName());
+        holder.tv.setText(item.getText());
     }
 
     @Override

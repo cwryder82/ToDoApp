@@ -6,41 +6,16 @@ import android.os.Parcelable;
 /*
 * Container Object to store notes
 */
-public class Note implements Parcelable {
+public class Note {
 
     private String text;
 
-    public Note(String name) {
-            text = name;
+    public Note(String text) {
+            this.text = text;
     }
 
-    public Note(Parcel in) {
-        this.text = in.readString();
-    }
-
-    public String getName() {
+    public String getText() {
         return text;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeStringArray(new String[] {this.text});
-    }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Note createFromParcel(Parcel in) {
-            return new Note(in);
-        }
-
-        public Note[] newArray(int size) {
-            return new Note[size];
-        }
-    };
 }

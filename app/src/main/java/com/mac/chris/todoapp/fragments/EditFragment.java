@@ -45,7 +45,7 @@ public class EditFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (note != null) {
-            noteText.setText(note.getName());
+            noteText.setText(note.getText());
         }
     }
 

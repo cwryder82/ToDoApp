@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    card_view:cardBackgroundColor="#D3D3D3"
-    card_view:cardCornerRadius="8dp"
+    card_view:cardCornerRadius="20dp"
     card_view:cardElevation="2dp"
     card_view:cardUseCompatPadding="true"
     android:clickable="true"
@@ -28,7 +27,7 @@
         <TextView
             android:id="@+id/noteText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:textSize="@dimen/note_text"
             android:padding="10dp"
             android:layout_gravity="center"

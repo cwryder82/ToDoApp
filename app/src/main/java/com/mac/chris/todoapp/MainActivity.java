@@ -1,13 +1,17 @@
 package com.mac.chris.todoapp;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.mac.chris.todoapp.fragments.AddNoteDialogFragment;
+import com.mac.chris.todoapp.fragments.EditDialogFragment;
 import com.mac.chris.todoapp.fragments.EditFragment;
 import com.mac.chris.todoapp.fragments.NotesFragment;
 
@@ -21,7 +25,7 @@ public class MainActivity extends AppCompatActivity
     FragmentTransaction fragmentTransaction;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -57,6 +61,15 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Create an instance of the AddList dialog fragment and show it
+     */
+    public void showAddNoteDialog(View view) {
+        /* Create an instance of the dialog fragment and show it */
+        DialogFragment dialog = new AddNoteDialogFragment();
+        dialog.show(fragmentManager, "AddNoteDialogFragment");
     }
 
     @Override

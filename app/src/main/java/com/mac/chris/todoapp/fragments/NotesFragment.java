@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -73,8 +75,7 @@ public class NotesFragment extends Fragment {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
-
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
 
         adapter = new NotesAdapter(mquery, Note.class, notes, keys);
@@ -90,7 +91,7 @@ public class NotesFragment extends Fragment {
             @Override
             public void onLongClick(View v, int i) {
                 mquery.orderByChild("text")
-                        .equalTo((String) notes.get(i).getName())
+                        .equalTo((String) notes.get(i).getText())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.hasChildren()) {
@@ -107,8 +108,8 @@ public class NotesFragment extends Fragment {
             }
         }));
 
-        //ItemTouchHelper ith = new ItemTouchHelper();
 
+/*
         // Add items via the Button and EditText at the bottom of the window.
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +137,7 @@ public class NotesFragment extends Fragment {
                 }
                 return false;
             }
-        });
+        });*/
 
         return rootView;
     }
@@ -186,12 +187,12 @@ public class NotesFragment extends Fragment {
 
     public void saveFromEdit(Note oldnote, final Note newnote, final int i) {
         mquery.orderByChild("text")
-                .equalTo((String) oldnote.getName())
+                .equalTo((String) oldnote.getText())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChildren()) {
                             DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
-                            firstChild.child("text").getRef().setValue(newnote.getName());
+                            firstChild.child("text").getRef().setValue(newnote.getText());
                             adapter.notifyItemChanged(i);
                         }
                     }
