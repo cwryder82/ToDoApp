@@ -80,7 +80,7 @@ public abstract class FirebaseRecyclerAdapter<ViewHolder extends RecyclerView.Vi
             String key = dataSnapshot.getKey();
 
             if (!mKeys.contains(key)) {
-                T item = dataSnapshot.child("text").getValue(mItemClass);
+                T item = dataSnapshot.getValue(mItemClass);
                 int insertedPosition;
                 if (previousChildName == null) {
                     mItems.add(0, item);
@@ -110,7 +110,7 @@ public abstract class FirebaseRecyclerAdapter<ViewHolder extends RecyclerView.Vi
             if (mKeys.contains(key)) {
                 int index = mKeys.indexOf(key);
                 T oldItem = mItems.get(index);
-                T newItem = dataSnapshot.child("text").getValue(FirebaseRecyclerAdapter.this.mItemClass);
+                T newItem = dataSnapshot.getValue(FirebaseRecyclerAdapter.this.mItemClass);
 
                 mItems.set(index, newItem);
 
@@ -140,7 +140,7 @@ public abstract class FirebaseRecyclerAdapter<ViewHolder extends RecyclerView.Vi
             String key = dataSnapshot.getKey();
 
             int index = mKeys.indexOf(key);
-            T item = dataSnapshot.child("text").getValue(FirebaseRecyclerAdapter.this.mItemClass);
+            T item = dataSnapshot.getValue(FirebaseRecyclerAdapter.this.mItemClass);
             mItems.remove(index);
             mKeys.remove(index);
             int newPosition;

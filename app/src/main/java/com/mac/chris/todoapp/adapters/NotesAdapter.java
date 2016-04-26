@@ -8,21 +8,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
 import com.mac.chris.todoapp.Note;
 import com.mac.chris.todoapp.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewHolder, Note> {
 
 
-    public NotesAdapter(Query query, Class<Note> itemClass, @Nullable ArrayList<Note> items, @Nullable ArrayList<String> keys) {
+    public NotesAdapter(Query query,
+                        Class<Note> itemClass,
+                        @Nullable ArrayList<Note> items,
+                        @Nullable ArrayList<String> keys) {
         super(query, itemClass, items, keys);
     }
 
@@ -40,7 +40,7 @@ public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewH
     public void onBindViewHolder(NoteViewHolder holder, int i) {
         Note item = getItem(i);
         holder.textView.setText(item.getText());
-        holder.timestampText.setText("some number");
+        holder.timestampText.setText(String.valueOf(item.getTimestampLastChangedLong()));
     }
 
     @Override
