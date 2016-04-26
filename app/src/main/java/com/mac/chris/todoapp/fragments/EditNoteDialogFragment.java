@@ -8,21 +8,18 @@ import android.view.WindowManager;
 import com.mac.chris.todoapp.Note;
 import com.mac.chris.todoapp.R;
 
-/**
- * Created by chris on 4/25/16.
- */
-public class EditDialogFragment extends DialogFragment {
+public class EditNoteDialogFragment extends DialogFragment {
 
     /**
      * Public static constructor that creates fragment and passes a bundle with data into it when adapter is created
      */
-    public static EditDialogFragment newInstance(Note note) {
-        EditDialogFragment editDialogFragment = new EditDialogFragment();
+    public static EditNoteDialogFragment newInstance(Note note) {
+        EditNoteDialogFragment editNoteDialogFragment = new EditNoteDialogFragment();
 
-        Bundle bundle = editDialogFragment.newInstanceHelper(note, R.layout.fragment_edit);
-        editDialogFragment.setArguments(bundle);
+        Bundle bundle = editNoteDialogFragment.newInstanceHelper(note, R.layout.fragment_edit);
+        editNoteDialogFragment.setArguments(bundle);
 
-        return editDialogFragment;
+        return editNoteDialogFragment;
     }
 
     /*

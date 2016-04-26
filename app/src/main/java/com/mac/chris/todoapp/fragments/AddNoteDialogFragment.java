@@ -18,9 +18,6 @@ import com.firebase.client.Firebase;
 import com.mac.chris.todoapp.Note;
 import com.mac.chris.todoapp.R;
 
-/**
- * Created by chris on 4/25/16.
- */
 public class AddNoteDialogFragment extends DialogFragment {
 
     EditText mEditTextNoteName;
@@ -70,7 +67,7 @@ public class AddNoteDialogFragment extends DialogFragment {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    addShoppingList();
+                    addNote();
                 }
                 return true;
             }
@@ -78,12 +75,12 @@ public class AddNoteDialogFragment extends DialogFragment {
 
         /* Inflate and set the layout for the dialog */
         /* Pass null as the parent view because its going in the dialog layout*/
-        builder.setView(rootView)
+        builder.setView(rootView).setTitle("Add Note")
                 /* Add action buttons */
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        addShoppingList();
+                        addNote();
                     }
                 });
 
@@ -91,13 +88,12 @@ public class AddNoteDialogFragment extends DialogFragment {
     }
 
     /**
-     * Add new active list
+     * Add new Note
      */
-    public void addShoppingList() {
+    public void addNote() {
         // Get the reference to the root node in Firebase
-        Firebase ref = new Firebase("https://todoapp1982.firebaseio.com/todoItems");
-        // Get the string that the user entered into the EditText and make an object with it
-        // We'll use "Anonymous Owner" for the owner because we don't have user accounts yet
+        Firebase ref = new Firebase("https://todoapp1982.firebaseio.com/");
+        // Get the string that the user entered into the EditText
         String userEnteredName = mEditTextNoteName.getText().toString();
         Note note = new Note(userEnteredName);
 

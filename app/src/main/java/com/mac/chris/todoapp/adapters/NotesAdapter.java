@@ -15,7 +15,9 @@ import com.firebase.client.Query;
 import com.mac.chris.todoapp.Note;
 import com.mac.chris.todoapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewHolder, Note> {
 
@@ -29,7 +31,7 @@ public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewH
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View noteView = inflater.inflate(R.layout.item_note, parent, false);
+        View noteView = inflater.inflate(R.layout.fragment_note_item, parent, false);
 
         return new NoteViewHolder(noteView);
     }
@@ -37,12 +39,13 @@ public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewH
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int i) {
         Note item = getItem(i);
-        holder.tv.setText(item.getText());
+        holder.textView.setText(item.getText());
+        holder.timestampText.setText("some number");
     }
 
     @Override
     protected void itemAdded(Note item, String key, int position) {
-        Log.d("MyAdapter", "Added a new item to the adapter at index"+position);
+        Log.d("MyAdapter", "Added a new item to the adapter at index "+position);
     }
 
     @Override
@@ -52,7 +55,7 @@ public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewH
 
     @Override
     protected void itemRemoved(Note item, String key, int position) {
-        Log.d("MyAdapter", "Removed an item from the adapter at" + position);
+        Log.d("MyAdapter", "Removed an item from the adapter at " + position);
     }
 
     @Override
@@ -62,15 +65,14 @@ public class NotesAdapter extends FirebaseRecyclerAdapter<NotesAdapter.NoteViewH
 
     public static class NoteViewHolder extends RecyclerView.ViewHolder{
 
-        public CardView cv;
-        public TextView tv;
-        public ImageView img;
+        public CardView cardView;
+        public TextView textView,timestampText;
 
         public NoteViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.cv);
-            img = (ImageView) itemView.findViewById(R.id.noteImage);
-            tv = (TextView) itemView.findViewById(R.id.noteText);
+            cardView = (CardView) itemView.findViewById(R.id.cv);
+            textView = (TextView) itemView.findViewById(R.id.noteText);
+            timestampText = (TextView) itemView.findViewById(R.id.timestampText);
         }
     }
 }

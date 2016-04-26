@@ -71,7 +71,7 @@ public abstract class FirebaseRecyclerAdapter<ViewHolder extends RecyclerView.Vi
             mKeys = new ArrayList<>();
         }
         this.mItemClass = itemClass;
-        query.addChildEventListener(mListener);
+        mQuery.addChildEventListener(mListener);
     }
 
     private ChildEventListener mListener = new ChildEventListener() {

@@ -69,7 +69,7 @@ public class NotesFragment extends Fragment {
 
         //Firebase.getDefaultConfig().setPersistenceEnabled(true);
         Firebase.setAndroidContext(getActivity());
-        mquery = new Firebase("https://todoapp1982.firebaseio.com/todoItems");
+        mquery = new Firebase("https://todoapp1982.firebaseio.com/");
 
         addText = (EditText) rootView.findViewById(R.id.add_note);
 
@@ -91,7 +91,7 @@ public class NotesFragment extends Fragment {
             @Override
             public void onLongClick(View v, int i) {
                 mquery.orderByChild("text")
-                        .equalTo((String) notes.get(i).getText())
+                        .equalTo(notes.get(i).getText())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.hasChildren()) {
@@ -107,38 +107,6 @@ public class NotesFragment extends Fragment {
                 Toast.makeText(getActivity(), "Note Deleted at " + i, Toast.LENGTH_SHORT).show();
             }
         }));
-
-
-/*
-        // Add items via the Button and EditText at the bottom of the window.
-        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addText.setVisibility(View.VISIBLE);
-                addText.requestFocus();
-                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (inputMethodManager != null) {
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-            }
-        });
-
-        addText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    mquery.push().child("text").setValue(addText.getText().toString());
-                    addText.setText("");
-                    Snackbar.make(v, "Note Added", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    return true;
-                }
-                return false;
-            }
-        });*/
-
         return rootView;
     }
 
@@ -187,7 +155,7 @@ public class NotesFragment extends Fragment {
 
     public void saveFromEdit(Note oldnote, final Note newnote, final int i) {
         mquery.orderByChild("text")
-                .equalTo((String) oldnote.getText())
+                .equalTo(oldnote.getText())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChildren()) {

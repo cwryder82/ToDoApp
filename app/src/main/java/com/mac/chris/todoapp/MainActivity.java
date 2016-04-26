@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.mac.chris.todoapp.fragments.AddNoteDialogFragment;
-import com.mac.chris.todoapp.fragments.EditDialogFragment;
 import com.mac.chris.todoapp.fragments.EditFragment;
 import com.mac.chris.todoapp.fragments.NotesFragment;
 
